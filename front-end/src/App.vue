@@ -1,6 +1,7 @@
 <template>
 <div id="app">
 	<div class='body-container'>
+		<router-link to="/Admin">Admin</router-link>
 		<div id="nav">
 			<router-link to="/">Home</router-link> |
 			<router-link to="/Browse">Browse</router-link> |

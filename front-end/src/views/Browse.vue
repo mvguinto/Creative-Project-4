@@ -10,7 +10,7 @@
 		</form>
 	</div>
 	<div class="recipes">
-		<div class="recipe" v-for="recipe in recipes" :key="recipe.id">
+		<div class="recipe" v-for="recipe in filteredRecipes" :key="recipe._id">
 			<img :src="'/images/recipes/' + recipe.image">
 			<div class="info">
 				<router-link :to="{ name: 'Recipe', params: {recipeName: recipe.name }}">{{recipe.name}}</router-link>
@@ -22,21 +22,26 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	name: 'Browse',
 	data() {
 		return {
+			recipes: [],
 			filter: 'Name',
 			searchText: ''
 		}
 	},
+	created() {
+		this.getRecipes();
+	},
 	computed: {
-		recipes() {
+		filteredRecipes() {
 			if (this.filter === 'Name') {
-				return this.$root.$data.recipes.filter(recipe => recipe.name.toLowerCase()
+				return this.recipes.filter(recipe => recipe.name.toLowerCase()
 					.search(this.searchText.toLowerCase()) >= 0);
 			} else if (this.filter == 'Ingredient') {
-				return this.$root.$data.recipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.name.toLowerCase()
+				return this.recipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.name.toLowerCase()
 					.search(this.searchText.toLowerCase()) >= 0));
 			} else {
 				return null
@@ -47,6 +52,15 @@ export default {
 		},
 	},
 	methods: {
+		async getRecipes() {
+			try {
+				let response = await axios.get("/api/recipes");
+				this.recipes = response.data;
+				return true;
+			} catch (error) {
+				console.log(error);
+			}
+		},
 		select(filter) {
 			this.filter = filter;
 		}
