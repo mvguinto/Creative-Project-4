@@ -25,7 +25,9 @@ const recipeSchema = new mongoose.Schema({
     name: String,
     measurement: String
   }],
-  recipe: [String],
+  recipe: [{
+    instruction: String
+  }],
   difficulty: String,
   imageSource: String,
   recipeSource: String

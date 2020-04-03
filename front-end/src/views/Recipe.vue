@@ -8,7 +8,7 @@
   </ul>
   <h3>Instructions</h3>
   <ol>
-    <li class="instructions" v-for="(instruction, index) in recipe.recipe" :key="`instruction-${index}`">{{instruction}}</li>
+    <li class="instructions" v-for="(instruction, index) in recipe.recipe" :key="`instruction-${index}`">{{instruction.instruction}}</li>
   </ol>
   <p>Image taken from: <a :href="recipe.imageSource">Link</a></p>
   <p>Recipe taken from: <a :href="recipe.recipeSource">Link</a></p>
