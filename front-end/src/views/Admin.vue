@@ -5,113 +5,112 @@
   <div class="heading">
     <button @click="setAddRecipe">Add a Recipe</button>
     <button @click="setEditDeleteRecipe">Edit or Delete a Recipe</button>
+    <button @click="setAddUser">Add User</button>
+    <button @click="setEditDeleteUser">Edit or Delete a User</button>
   </div>
-  <div class="add" v-show='addRecipe'>
-    <div class="form">
-      <input v-model="recipeName" placeholder="Name">
-      <p></p>
-      <input type="file" name="photo" @change="fileChanged">
-      <div class="addIngredients">
-        <ul>
-          <li class="ingredient" v-for="ingredient in addedIngredients" :key="ingredient.name">{{ingredient.measurement}} {{ingredient.name}}</li>
-        </ul>
-        <input v-model="ingredientName" placeholder="Ingredient Name">
-        <input v-model="ingredientMeasurment" placeholder="Ingredient Measurement">
-        <button @click="addIngredient">Add Ingredient</button>
+  <div class="adminContent">
+    <div class="addRecipeView" v-show='addRecipe'>
+      <div class="form">
+        <input v-model="recipeName" placeholder="Name">
+        <div class="largeLineBreak"></div>
+        <input type="file" name="photo" @change="fileChanged">
+        <div class="addIngredients">
+          <ul>
+            <li class="ingredient" v-for="ingredient in addedIngredients" :key="ingredient.name">{{ingredient.measurement}} {{ingredient.name}}</li>
+          </ul>
+          <input v-model="ingredientName" placeholder="Ingredient Name">
+          <input v-model="ingredientMeasurment" placeholder="Ingredient Measurement">
+          <button @click="addIngredient">Add Ingredient</button>
+        </div>
+        <div class="addInstructions">
+          <p>Please add recipe one step at a time</p>
+          <ol>
+            <li class="instructions" v-for="(instruction, index) in addedInstructions" :key="`instruction-${index}`">{{instruction.instruction}}</li>
+          </ol>
+          <textarea v-model="recipeInstruction" rows="4" cols="50" placeholder="Recipe Step"></textarea>
+          <div></div>
+          <button @click="addInstruction">Add Step</button>
+        </div>
+        <input v-model="difficulty" placeholder="Recipe Difficulty">
+        <div class="lineBreak"></div>
+        <p>If you are using an original recipe and/or image, leave the appropriate spaces below blank.</p>
+        <input v-model="imageSource" placeholder="Image Source">
+        <div></div>
+        <input v-model="recipeSource" placeholder="Recipe Source">
+        <div class="lineBreak"></div>
+        <button @click="uploadRecipe">Upload</button>
       </div>
-      <div class="addRecipe">
-        <p>Please add recipe one step at a time</p>
-        <ol>
-          <li class="instructions" v-for="(instruction, index) in addedInstructions" :key="`instruction-${index}`">{{instruction.instruction}}</li>
-        </ol>
-        <textarea v-model="recipeInstruction" rows="4" cols="50" placeholder="Recipe Step"></textarea>
-        <button @click="addInstruction">Add Step</button>
+      <div class="upload" v-if="addedRecipe">
+        <p>Your recipe has been added! View your recipe at the link below.</p>
+        <router-link :to="{ name: 'Recipe', params: {recipeName: addedRecipe.name }}">{{addedRecipe.name}}</router-link>
       </div>
-      <input v-model="difficulty" placeholder="Recipe Difficulty">
-      <input v-model="imageSource" placeholder="Image Source.  Leave blank if using original image">
-      <input v-model="recipeSource" placeholder="Recipe Source.  Leave blank if using original recipe">
-      <button @click="upload">Upload</button>
     </div>
-    <div class="upload" v-if="addedRecipe">
-      <p>Your recipe has been added! View your recipe at the link below.</p>
-      <router-link :to="{ name: 'Recipe', params: {recipeName: addedRecipe.name }}">{{addedRecipe.name}}</router-link>
-    </div>
-  </div>
-  <!--Edit and Delete Recipe -->
-  <div class="edit" v-show="editDeleteRecipe">
-    <div class="form">
-      <input v-model="findName" placeholder="Search">
-      <div class="suggestions" v-if="recipeSuggestions.length > 0">
-        <div class="suggestion" v-for="s in recipeSuggestions" :key="s._id" @click="selectRecipe(s)">{{s.name}}
+    <!--Edit and Delete Recipe -->
+    <div class="editDeleteRecipeView" v-show="editDeleteRecipe">
+      <div class="form">
+        <input v-model="findName" placeholder="Search by Recipe Name">
+        <div class="suggestions" v-if="suggestions.length > 0">
+          <div class="suggestion" v-for="s in suggestions" :key="s._id" @click="selectRecipe(s)">{{s.name}}
+          </div>
+        </div>
+      </div>
+      <div class="upload" v-if="findRecipe">
+        <input v-model="findRecipe.name">
+        <img :src="findRecipe.image" />
+        <div class="editIngredients" v-for="(ingredient, index) in findRecipe.ingredients" :key="`ingredient-${index}`">
+          <input v-model="ingredient.name">
+          <input v-model="ingredient.measurement">
+        </div>
+        <input v-model="ingredientName" placeholder="Add New Ingredient Name">
+        <input v-model="ingredientMeasurment" placeholder="Add New Ingredient Measurement">
+        <button @click="editAddIngredient">Add Ingredient</button>
+        <div class="editRecipe" v-for="(instruction, index) in findRecipe.recipe" :key="`instruction-${index}`">
+          <textarea v-model="instruction.instruction" rows="4" cols="50"></textarea>
+        </div>
+        <textarea v-model="recipeInstruction" rows="4" cols="50" placeholder="Add New Recipe Step"></textarea>
+        <button @click="editAddInstruction">Add Step</button>
+        <div class="actions" v-if="findRecipe">
+          <button @click="deleteRecipe(findRecipe)">Delete</button>
+          <button @click="editRecipe(findRecipe)">Edit</button>
         </div>
       </div>
     </div>
-    <div class="upload" v-if="findRecipe">
-      <input v-model="findRecipe.name">
-      <img :src="findRecipe.image" />
-      <div class="editIngredients" v-for="(ingredient, index) in findRecipe.ingredients" :key="`ingredient-${index}`">
-        <input v-model="ingredient.name">
-        <input v-model="ingredient.measurement">
+    <!--Add a User -->
+    <div class="addUserView" v-show="addUser">
+      <div class="form">
+        <input v-model="userName" placeholder="Name">
+        <input v-model="userUsername" placeholder="Username">
+        <div class="largeLineBreak"></div>
+        <textarea v-model="userBio" rows="4" cols="50" placeholder="Bio"></textarea>
+        <p></p>
+        <input v-model="userExperience" placeholder="Cooking Experience Level">
+        <div class="largeLineBreak"></div>
+        <button @click="uploadUser">Upload</button>
       </div>
-      <input v-model="ingredientName" placeholder="Add New Ingredient Name">
-      <input v-model="ingredientMeasurment" placeholder="Add New Ingredient Measurement">
-      <button @click="editAddIngredient">Add Ingredient</button>
-      <div class="editRecipe" v-for="(instruction, index) in findRecipe.recipe" :key="`instruction-${index}`">
-        <textarea v-model="instruction.instruction" rows="4" cols="50"></textarea>
+    </div>
+    <!--Edit and Delete User -->
+    <div class="editDeleteUserView" v-show="editDeleteUser">
+      <div class="form">
+        <input v-model="findName" placeholder="Search by Username">
+        <div class="suggestions" v-if="suggestions.length > 0">
+          <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
+          </div>
+        </div>
       </div>
-      <textarea v-model="recipeInstruction" rows="4" cols="50" placeholder="Add New Recipe Step"></textarea>
-      <button @click="editAddInstruction">Add Step</button>
-      <div class="actions" v-if="findRecipe">
-        <button @click="deleteItem(findRecipe)">Delete</button>
-        <button @click="editItem(findRecipe)">Edit</button>
+      <div class="upload" v-if="findUser">
+        <input v-model="findUser.name">
+        <input v-model="findUser.username">
+        <p></p>
+        <textarea v-model="findUser.bio" rows="4" cols="34"></textArea>
+        <p></p>
+        <input v-model="findUser.experience" />
+      </div>
+      <div class="actions" v-if="findUser">
+        <button @click="deleteUser(findUser)">Delete</button>
+        <button @click="editUser(findUser)">Edit</button>
       </div>
     </div>
   </div>
-  <!--
-  <div class="heading">
-    <div class="circle">3</div>
-    <h2>Add a User</h2>
-  </div>
-  <div class="add">
-    <div class="form">
-      <input v-model="userName" placeholder="Username">
-      <p></p>
-      <textarea v-model="description" rows="4" cols="50" placeholder="Item Description"></textarea>
-      <p></p>
-      <input type="file" name="photo" @change="fileChanged">
-      <button @click="upload">Upload</button>
-    </div>
-    <div class="upload" v-if="addRecipe">
-      <h2>{{addRecipe.title}}</h2>
-      <img :src="addRecipe.path" />
-      <p>{{addRecipe.description}}</p>
-    </div>
-  </div>
-	<div class="heading">
-		<div class="circle">4</div>
-		<h2>Edit/Delete a User</h2>
-	</div>
-	<div class="edit">
-		<div class="form">
-			<input v-model="findRecipe" placeholder="Search">
-			<div class="suggestions" v-if="suggestions.length > 0">
-				<div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectRecipe(s)">{{s.title}}
-				</div>
-			</div>
-		</div>
-		<div class="upload" v-if="findRecipe">
-			<input v-model="findRecipe.title">
-			<p></p>
-			<textarea v-model="findRecipe.description" rows="4" cols="34"></textArea>
-			<p></p>
-			<img :src="findItem.path" />
-		</div>
-		<div class="actions" v-if="findRecipe">
-			<button @click="deleteItem(findRecipe)">Delete</button>
-			<button @click="editItem(findRecipe)">Edit</button>
-		</div>
-	</div>
--->
 </div>
 </template>
 
@@ -121,6 +120,10 @@ export default {
   name: 'Admin',
   data() {
     return {
+      addRecipe: false,
+      editDeleteRecipe: false,
+      addUser: false,
+      editDeleteUser: false,
       recipes: [],
       recipeName: '',
       file: null,
@@ -133,23 +136,45 @@ export default {
       imageSource: '',
       recipeSource: '',
       addedRecipe: null,
-      addRecipe: false,
-      editDeleteRecipe: false,
       findName: '',
       findRecipe: null,
+      userName: '',
+      userUsername: '',
+      userBio: '',
+      userExperience: '',
+      addedUser: null,
+      users: [],
+      findUser: null
     }
   },
   created() {
     this.getRecipes();
+    this.getUsers();
   },
   methods: {
     setAddRecipe() {
       this.addRecipe = true;
       this.editDeleteRecipe = false;
+      this.addUser = false;
+      this.editDeleteUser = false;
     },
     setEditDeleteRecipe() {
       this.addRecipe = false;
       this.editDeleteRecipe = true;
+      this.addUser = false;
+      this.editDeleteUser = false;
+    },
+    setAddUser() {
+      this.addRecipe = false;
+      this.editDeleteRecipe = false;
+      this.addUser = true;
+      this.editDeleteUser = false;
+    },
+    setEditDeleteUser() {
+      this.addRecipe = false;
+      this.editDeleteRecipe = false;
+      this.addUser = false;
+      this.editDeleteUser = true;
     },
     selectRecipe(recipe) {
       this.findName = '';
@@ -172,7 +197,7 @@ export default {
       })
       this.recipeInstruction = '';
     },
-    async upload() {
+    async uploadRecipe() {
       try {
         const formData = new FormData();
         formData.append('photo', this.file, this.file.name)
@@ -188,6 +213,7 @@ export default {
         });
         this.addedRecipe = r2.data;
         this.clearAddedRecipe();
+        this.getRecipes();
       } catch (error) {
         console.log(error);
       }
@@ -224,46 +250,128 @@ export default {
       });
       this.recipeInstruction = '';
     },
+    async deleteRecipe(recipe) {
+      try {
+        await axios.delete("/api/recipes/" + recipe._id);
+        this.findRecipe = null;
+        this.getRecipes();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editRecipe(recipe) {
+      try {
+        await axios.put("/api/recipes/" + recipe._id, {
+          name: recipe.name,
+          ingredients: recipe.ingredients,
+          recipe: recipe.recipe,
+          difficulty: recipe.difficulty,
+          recipeSource: recipe.recipeSource,
+        });
+        this.findRecipe = null;
+        this.getRecipes();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async uploadUser() {
+      try {
+        let r1 = await axios.post("/api/users/", {
+          name: this.userName,
+          username: this.userUsername,
+          bio: this.userBio,
+          experience: this.userExperience
+        });
+        this.addedUser = r1.data;
+        this.clearAddedUser();
+        this.getUsers();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getUsers() {
+      try {
+        let response = await axios.get("/api/users");
+        this.users = response.data;
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    clearAddedUser() {
+      this.userName = '';
+      this.userUsername = '';
+      this.userBio = '';
+      this.userExperience = '';
+    },
+    selectUser(user) {
+      this.findName = '';
+      this.findUser = user;
+    },
+    async deleteUser(user) {
+      try {
+        await axios.delete("/api/users/" + user._id);
+        this.findUser = null;
+        this.getUsers();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editUser(user) {
+      try {
+        await axios.put("/api/users/" + user._id, {
+          name: user.name,
+          username: user.username,
+          bio: user.bio,
+          experience: user.experience,
+        });
+        this.findUser = null;
+        this.getUsers();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   computed: {
-    recipeSuggestions() {
-      let recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().startsWith(this.findName.toLowerCase()));
-      return recipes.sort((a, b) => a.name > b.name);
+    suggestions() {
+      if (this.editDeleteRecipe) {
+        let recipes = this.recipes.filter(recipe => recipe.name.toLowerCase().startsWith(this.findName.toLowerCase()));
+        return recipes.sort((a, b) => a.name > b.name);
+      } else if (this.editDeleteUser) {
+        let users = this.users.filter(user => user.username.toLowerCase().startsWith(this.findName.toLowerCase()));
+        return users.sort((a, b) => a.name > b.name);
+      } else {
+        return [];
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.image h2 {
-  font-style: italic;
-  font-size: 1em;
+p {
+  margin-block-start: 5px;
+  margin-block-end: 5px;
 }
 
-.heading {
-  display: flex;
-  margin-bottom: 20px;
-  margin-top: 20px;
+.adminContent {
+  padding-top: 30px;
 }
 
-.heading h2 {
-  margin-top: 8px;
-  margin-left: 10px;
+.largeLineBreak {
+  height: 30px;
 }
 
-.add,
-.edit {
-  display: flex;
+.lineBreak {
+  height: 10px;
 }
 
-.circle {
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  padding: 8px;
-  background: #333;
-  color: #fff;
-  text-align: center
+.addInstructions {
+  padding-top: 25px;
 }
 
 /* Form */
@@ -271,12 +379,9 @@ input,
 textarea,
 select,
 button {
-  font-family: 'Montserrat', sans-serif;
+  margin: 5px;
+  font-family: 'Indie Flower', cursive;
   font-size: 1em;
-}
-
-.form {
-  margin-right: 50px;
 }
 
 /* Uploaded images */

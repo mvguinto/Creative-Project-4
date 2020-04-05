@@ -10,8 +10,12 @@
   <ol>
     <li class="instructions" v-for="(instruction, index) in recipe.recipe" :key="`instruction-${index}`">{{instruction.instruction}}</li>
   </ol>
-  <p>Image taken from: <a :href="recipe.imageSource">Link</a></p>
-  <p>Recipe taken from: <a :href="recipe.recipeSource">Link</a></p>
+  <div class="imageSource" v-if="hasImageSource">
+    <p>Image taken from: <a :href="recipe.imageSource">Link</a></p>
+  </div>
+  <div class="recipeSource" v-if="hasRecipeSource">
+    <p>Recipe taken from: <a :href="recipe.recipeSource">Link</a></p>
+  </div>
 </div>
 </template>
 

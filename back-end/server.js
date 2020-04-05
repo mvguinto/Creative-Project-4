@@ -91,4 +91,89 @@ app.post('/api/photos', upload.single('photo'), async (req, res) => {
   });
 });
 
+app.delete('/api/recipes/:id', async (req, res) => {
+  try {
+    await Recipe.deleteOne({
+      _id: req.params.id
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put('/api/recipes/:id', async (req, res) => {
+  try {
+    let recipe = await Recipe.findOne({
+      _id: req.params.id
+    });
+    recipe.name = req.body.name;
+    recipe.difficult = req.body.difficulty;
+    recipe.ingredients = req.body.ingredients;
+    recipe.recipe = req.body.recipe;
+    recipe.recipeSource = req.body.recipeSource;
+    await recipe.save();
+    res.send(recipe);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get('/api/users', async (req, res) => {
+  try {
+    let users = await User.find();
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500)
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    username: req.body.username,
+    bio: req.body.bio,
+    experience: req.body.experience
+  });
+  try {
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    await User.deleteOne({
+      _id: req.params.id
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    let user = await User.findOne({
+      _id: req.params.id
+    });
+    user.name = req.body.name;
+    user.username = req.body.username;
+    user.bio = req.body.bio;
+    user.experience = req.body.experience;
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3001, () => console.log('Server listening on port 3001!'));
