@@ -91,6 +91,18 @@ app.post('/api/photos', upload.single('photo'), async (req, res) => {
   });
 });
 
+app.get('/api/recipes/:id', async (req, res) => {
+  try {
+    let recipe = await Recipe.findOne({
+      _id: req.params.id
+    });;
+    res.send(recipe);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500)
+  }
+});
+
 app.delete('/api/recipes/:id', async (req, res) => {
   try {
     await Recipe.deleteOne({
@@ -113,6 +125,7 @@ app.put('/api/recipes/:id', async (req, res) => {
     recipe.ingredients = req.body.ingredients;
     recipe.recipe = req.body.recipe;
     recipe.recipeSource = req.body.recipeSource;
+    recipe.imageSource = req.body.imageSource;
     await recipe.save();
     res.send(recipe);
   } catch (error) {
@@ -140,6 +153,18 @@ app.post('/api/users', async (req, res) => {
   });
   try {
     await user.save();
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    let user = await User.findOne({
+      _id: req.params.id
+    });
     res.send(user);
   } catch (error) {
     console.log(error);

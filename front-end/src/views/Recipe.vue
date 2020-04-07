@@ -1,51 +1,74 @@
 <template>
 <div class="recipePage">
-  <h1>{{recipe.name}}</h1>
-  <img :src="'/images/recipes/' + recipe.image">
-  <h3>Ingredients</h3>
-  <ul>
-    <li class="ingredients" v-for="ingredient in recipe.ingredients" :key="ingredient.name">{{ingredient.measurement}} {{ingredient.name}}</li>
-  </ul>
-  <h3>Instructions</h3>
-  <ol>
-    <li class="instructions" v-for="(instruction, index) in recipe.recipe" :key="`instruction-${index}`">{{instruction.instruction}}</li>
-  </ol>
-  <div class="imageSource" v-if="hasImageSource">
-    <p>Image taken from: <a :href="recipe.imageSource">Link</a></p>
-  </div>
-  <div class="recipeSource" v-if="hasRecipeSource">
-    <p>Recipe taken from: <a :href="recipe.recipeSource">Link</a></p>
-  </div>
+	<h1>{{recipe.name}}</h1>
+	<img :src="recipe.image">
+	<h3>Ingredients</h3>
+	<ul>
+		<li class="ingredients" v-for="(ingredient, index) in recipe.ingredients" :key="`ingredient-${index}`">{{ingredient.measurement}} {{ingredient.name}}</li>
+	</ul>
+	<h3>Instructions</h3>
+	<ol>
+		<li class="instructions" v-for="(instruction, index) in recipe.recipe" :key="`instruction-${index}`">{{instruction.instruction}}</li>
+	</ol>
+	<div class="imageSource" v-if="hasImageSource">
+		<p>Image taken from: <a :href="recipe.imageSource">Link</a></p>
+	</div>
+	<div class="recipeSource" v-if="hasRecipeSource">
+		<p>Recipe taken from: <a :href="recipe.recipeSource">Link</a></p>
+	</div>
 </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  name: 'RecipePage',
-  props: {
-    recipeName: String
-  },
-  data() {
-    if (this.recipeName === "random") {
-      return {
-        recipe: this.$root.$data.recipes[Math.floor(Math.random() * this.$root.$data.recipes.length)]
-      }
-    } else
-      return {
-        recipe: this.$root.$data.recipes.find(recipe => recipe.name === this.recipeName)
-      }
-  },
+	name: 'RecipePage',
+	props: {
+		recipeID: String
+	},
+	data() {
+		return {
+			recipe: ''
+		};
+	},
+	created() {
+		this.getRecipe()
+	},
+	methods: {
+		async getRecipe() {
+			try {
+				if (this.recipeID === 'random') {
+					let response = await axios.get("/api/recipes");
+					let recipes = response.data;
+					this.recipe = recipes[Math.floor(Math.random() * recipes.length)]
+				} else {
+					let response = await axios.get("/api/recipes/" + this.recipeID)
+					this.recipe = response.data;
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	},
+	computed: {
+		hasImageSource() {
+			return !(this.recipe.imageSource === '');
+		},
+		hasRecipeSource() {
+			return !(this.recipe.recipeSource === '');
+		}
+	}
 }
 </script>
 
 <style>
 .ingredients,
 .instructions {
-  text-align: left;
-  padding-bottom: 20px;
+	text-align: left;
+	padding-bottom: 20px;
 }
 
 .recipePage img {
-  width: 40%;
+	width: 40%;
 }
 </style>

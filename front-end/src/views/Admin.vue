@@ -74,6 +74,8 @@
 				<div class="lineBreak"></div>
 				<button @click="editAddInstruction">Add Step</button>
 				<div class="lineBreak"></div>
+				<input v-model="findRecipe.imageSource" placeholder="Add an Image Source">
+				<div></div>
 				<input v-model="findRecipe.recipeSource" placeholder="Add Recipe Source">
 				<div class="lineBreak"></div>
 				<div class="actions" v-if="findRecipe">
@@ -275,6 +277,7 @@ export default {
 					recipe: recipe.recipe,
 					difficulty: recipe.difficulty,
 					recipeSource: recipe.recipeSource,
+					imageSource: recipe.imageSource
 				});
 				this.findRecipe = null;
 				this.getRecipes();

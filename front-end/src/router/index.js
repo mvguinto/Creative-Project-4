@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Browse from '../views/Browse.vue'
 import Recipe from '../views/Recipe.vue'
+import User from '../views/User.vue'
 import Admin from '../views/Admin.vue'
 
 Vue.use(VueRouter)
@@ -18,9 +19,15 @@ const routes = [{
     component: Browse
   },
   {
-    path: '/recipe/:recipeName',
+    path: '/recipe/:recipeID',
     name: 'Recipe',
     component: Recipe,
+    props: true
+  },
+  {
+    path: '/user/:userID',
+    name: 'User',
+    component: User,
     props: true
   },
   {
