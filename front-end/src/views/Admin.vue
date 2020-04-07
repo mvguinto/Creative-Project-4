@@ -458,7 +458,7 @@ button {
 }
 
 .smallText {
-	width: 50%;
+	width: 70%;
 }
 
 .largeText {
@@ -469,6 +469,10 @@ button {
 @media only screen and (min-width: 961px) {
 	.largeText {
 		height: 250px;
+	}
+
+	.smallText {
+		width: 50%;
 	}
 }
 </style>
