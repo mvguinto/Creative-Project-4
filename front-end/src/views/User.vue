@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
 	name: 'UserPage',
 	props: {
@@ -17,21 +18,21 @@ export default {
 	},
 	data() {
 		return {
-			user:
+			user: ''
 		}
 	},
 	async created() {
 		this.user = await this.getUser()
-	}
+	},
 	methods: {
 		async getUser() {
 			try {
-				let response = await axios.get("/api/user/" + this.UserID)
+				let response = await axios.get("/api/users/" + this.userID)
 				this.user = response.data;
+			} catch (error) {
+				console.log(error);
 			}
-		} catch (error) {
-			console.log(error);
-		}
-	},
+		},
+	}
 }
 </script>

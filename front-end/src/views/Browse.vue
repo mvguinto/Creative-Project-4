@@ -23,7 +23,7 @@
 		<div class="user" v-for="user in filteredUsers" :key="user._id">
 			<img src="/images/Chef-Logo.jpg">
 			<div class="info">
-				<!-- <router-link :to="{ name: 'User', params: {userID: user.username }}">{{user.username}}</router-link> -->
+				<router-link :to="{ name: 'User', params: {userID: user._id }}">{{user.username}}</router-link>
 				<p>Experience: {{user.experience}}</p>
 			</div>
 		</div>
