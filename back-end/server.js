@@ -219,7 +219,8 @@ app.put('/api/users/favorites', async (req, res) => {
       user.favorite_recipes.push(recipe)
     }
     await user.save();
-    res.send(user);
+    let message = recipe.name + " has been added to favorites for" + user.username;
+    res.send(message);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -240,9 +241,11 @@ app.delete('/api/users/favorites', async (req, res) => {
       });
     }
     await user.save();
-    res.send(user);
+    let message = recipe.name + " has been removed from favorites for" + user.username;
+    res.send(message);
   } catch (error) {
     console.log(error);
+    l
     res.sendStatus(500);
   }
 });
