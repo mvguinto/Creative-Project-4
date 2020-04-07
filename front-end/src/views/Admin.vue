@@ -453,8 +453,8 @@ button {
 }
 
 .suggestion:hover {
-	background-color: #5BDEFF;
-	color: #fff;
+	background-color: #f2ebc9;
+	color: #633417;
 }
 
 .largeText {
