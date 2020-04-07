@@ -1,7 +1,7 @@
 <template>
 <div class="footer">
 	<div class="footer-info">
-		<a href="https://github.com/mvguinto/Creative-Project-3">GitHub</a>
+		<a href="https://github.com/mvguinto/Creative-Project-4">GitHub</a>
 		<img src="/Star-Spacer.png">
 		<p>By: Maleah Guinto and Derek Hensley</p>
 	</div>
