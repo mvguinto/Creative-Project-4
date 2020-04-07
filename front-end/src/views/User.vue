@@ -21,6 +21,9 @@
 	<div v-else>
 		<p>This user does not have any favorited recipes</p>
 	</div>
+	<div v-if='hasError'>
+		{{error.message}}
+	</div>
 </div>
 </template>
 
@@ -34,7 +37,8 @@ export default {
 	data() {
 		return {
 			user: '',
-			favoriteRecipes: []
+			favoriteRecipes: [],
+			error: ''
 		}
 	},
 	async created() {
@@ -45,7 +49,7 @@ export default {
 				this.favoriteRecipes.push(recipe);
 			}
 		} catch (error) {
-			console.log(error);
+			this.error = error;
 		}
 	},
 	methods: {
@@ -54,7 +58,7 @@ export default {
 				let response = await axios.get("/api/users/" + this.userID)
 				this.user = response.data;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async getRecipe(recipeID) {
@@ -62,8 +66,13 @@ export default {
 				let response = await axios.get("/api/recipes/" + recipeID)
 				return response.data;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
+		}
+	},
+	computed: {
+		hasError() {
+			return this.error != null
 		}
 	}
 }

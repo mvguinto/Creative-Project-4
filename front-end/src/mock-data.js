@@ -803,7 +803,7 @@ async function fill() {
       }
       let r1 = await axios.post('http://localhost:3001/api/recipes/', {
         name: mock[i].name,
-        image: mock[i].image,
+        image: '/images/' + mock[i].image,
         ingredients: mock[i].ingredients,
         recipe: recipes,
         difficulty: mock[i].difficulty,

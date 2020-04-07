@@ -129,6 +129,9 @@
 			</div>
 		</div>
 	</div>
+	<div v-if="hasError">
+		{{error.message}}
+	</div>
 </div>
 </template>
 
@@ -234,7 +237,7 @@ export default {
 				this.clearAddedRecipe();
 				this.getRecipes();
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async getRecipes() {
@@ -243,7 +246,7 @@ export default {
 				this.recipes = response.data;
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		clearAddedRecipe() {
@@ -276,7 +279,7 @@ export default {
 				this.getRecipes();
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async editRecipe(recipe) {
@@ -293,7 +296,7 @@ export default {
 				this.getRecipes();
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async uploadUser() {
@@ -308,7 +311,7 @@ export default {
 				this.clearAddedUser();
 				this.getUsers();
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async getUsers() {
@@ -317,7 +320,7 @@ export default {
 				this.users = response.data;
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		clearAddedUser() {
@@ -340,7 +343,7 @@ export default {
 				let response = await axios.get("/api/recipes/" + recipeID)
 				return response.data;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async deleteUser(user) {
@@ -350,7 +353,7 @@ export default {
 				this.getUsers();
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		async editUser(user) {
@@ -365,7 +368,7 @@ export default {
 				this.getUsers();
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 	},
@@ -382,6 +385,9 @@ export default {
 			} else {
 				return [];
 			}
+		},
+		hasError() {
+			return this.error !== null;
 		}
 	}
 }

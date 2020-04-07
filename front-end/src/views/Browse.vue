@@ -28,6 +28,9 @@
 			</div>
 		</div>
 	</div>
+	<div v-if="hasError">
+		{{error.message}}
+	</div>
 </div>
 </template>
 
@@ -40,7 +43,8 @@ export default {
 			recipes: [],
 			users: [],
 			filter: 'Name',
-			searchText: ''
+			searchText: '',
+			error: ''
 		}
 	},
 	created() {
@@ -76,6 +80,9 @@ export default {
 		userIsActive() {
 			return this.filter === "User"
 		},
+		hasError() {
+			return this.error !== null
+		}
 	},
 	methods: {
 		async getRecipes() {
@@ -84,7 +91,7 @@ export default {
 				this.recipes = response.data;
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		},
 		select(filter) {
@@ -96,7 +103,7 @@ export default {
 				this.users = response.data;
 				return true;
 			} catch (error) {
-				console.log(error);
+				this.error = error;
 			}
 		}
 	}
