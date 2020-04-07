@@ -166,7 +166,8 @@ export default {
 			addedUser: null,
 			users: [],
 			findUser: null,
-			findUserRecipes: []
+			findUserRecipes: [],
+			error: ''
 		}
 	},
 	created() {
