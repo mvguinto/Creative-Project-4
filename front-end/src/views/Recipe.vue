@@ -59,7 +59,7 @@ export default {
     },
     async addFavorite() {
       try {
-        let response = await axios.put("/api/users/favorites", {
+        let response = await axios.put("/api/users/favorite", {
           username: this.searchUser,
           recipeID: this.recipe._id,
         });
@@ -67,11 +67,12 @@ export default {
         this.searchUser = '';
       } catch (error) {
         console.log(error);
+        this.message = error.response.data;
       }
     },
     async removeFavorite() {
       try {
-        let response = await axios.delete("/api/users/favorites", {
+        let response = await axios.put("/api/users/unfavorite", {
           username: this.searchUser,
           recipeID: this.recipe._id,
         });
@@ -79,6 +80,7 @@ export default {
         this.searchUser = '';
       } catch (error) {
         console.log(error);
+        this.message = error.response.data;
       }
     }
   },

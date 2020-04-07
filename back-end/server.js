@@ -172,12 +172,69 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/users/:id', async (req, res) => {
+
+app.put('/api/users/favorite', async (req, res) => {
   try {
-    await User.deleteOne({
-      _id: req.params.id
+    let user = await User.findOne({
+      username: req.body.username
     });
-    res.sendStatus(200);
+    if (user === null) {
+      res.status(404)
+        .send('Error: User not found');
+      return;
+    }
+    let recipe = await Recipe.findOne({
+      _id: req.body.recipeID
+    })
+    if (recipe === null) {
+      res.status(404)
+        .send('Error: Recipe not found')
+      return;
+    }
+    if (!user.favorite_recipes.find(arecipe =>
+        arecipe.equals(recipe.id)
+      )) {
+      user.favorite_recipes.push(recipe)
+    } else {
+      let message = recipe.name + " is already in favorites for " + user.username;
+      res.send(message);
+      return;
+    }
+    await user.save();
+    let message = recipe.name + " has been added to favorites for " + user.username;
+    res.send(message);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.put('/api/users/unfavorite', async (req, res) => {
+  try {
+    let user = await User.findOne({
+      username: req.body.username
+    });
+    if (user === null) {
+      res.status(404).send('Error: User not found');
+      return;
+    }
+    let recipe = await Recipe.findOne({
+      _id: req.body.recipeID
+    });
+
+    if (user.favorite_recipes.find(arecipe =>
+        arecipe.equals(recipe.id)
+      )) {
+      user.favorite_recipes = user.favorite_recipes.filter(arecipe =>
+        !(arecipe.equals(recipe.id)));
+    } else {
+      res.status(404)
+        .send('Error: Recipe not in favorites')
+      return;
+    }
+    await user.save();
+    let message = recipe.name + " has been removed from favorites for " + user.username;
+    res.send(message);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -201,51 +258,14 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
-app.put('/api/users/favorites', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   try {
-    let user = await User.findOne({
-      username: req.body.username
+    await User.deleteOne({
+      _id: req.params.id
     });
-    if (user === null) {
-      res.status(404).send('Error: User not Found');
-    }
-    let recipe = await Recipe.findOne({
-      _id: req.body.recipeID
-    })
-    if (recipe === null) {
-      res.status(404).send('Error: Recipe not Found');
-    }
-    if (!user.favorite_recipes.include(recipe)) {
-      user.favorite_recipes.push(recipe)
-    }
-    await user.save();
-    let message = recipe.name + " has been added to favorites for" + user.username;
-    res.send(message);
+    res.sendStatus(200);
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
-  }
-});
-
-app.delete('/api/users/favorites', async (req, res) => {
-  try {
-    let user = await User.findOne({
-      username: req.body.username
-    });
-    if (user === null) {
-      res.status(404).send('Error: User not Found');
-    }
-    if (user.favorite_recipes.include(recipe)) {
-      user.favorite_recipes = user.favorite_recipes.filter(recipe => {
-        return !(recipe._id === req.body.recipeID)
-      });
-    }
-    await user.save();
-    let message = recipe.name + " has been removed from favorites for" + user.username;
-    res.send(message);
-  } catch (error) {
-    console.log(error);
-    l
     res.sendStatus(500);
   }
 });
