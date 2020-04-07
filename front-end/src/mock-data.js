@@ -790,5 +790,31 @@ let mock = [{
     imageSource: "http://wholeandheavenlyoven.com/2015/03/12/30-minute-chicken-veggie-curry-2/"
   }
 ]
+const axios = require('axios')
 
-export default mock;
+async function fill() {
+  try {
+    for (let i = 0; i < mock.length; i++) {
+      let recipes = [];
+      for (let j = 0; j < mock[i].recipe.length; j++) {
+        recipes.push({
+          instruction: mock[i].recipe[j]
+        });
+      }
+      let r1 = await axios.post('http://localhost:3001/api/recipes/', {
+        name: mock[i].name,
+        image: mock[i].image,
+        ingredients: mock[i].ingredients,
+        recipe: recipes,
+        difficulty: mock[i].difficulty,
+        imageSource: mock[i].imageSource,
+        recipeSource: mock[i].recipeSource,
+      });
+      console.log(r1)
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+fill()

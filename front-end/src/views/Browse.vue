@@ -144,15 +144,14 @@ a {
 	color: #000000
 }
 
-.recipe img,
-	{
-	height: 125px;
+.recipe img {
+	height: 100px;
 	width: 75px;
 	object-fit: cover;
 }
 
 .user img {
-	height: 125px;
+	height: 100px;
 	width: 75px;
 	object-fit: contain;
 }
