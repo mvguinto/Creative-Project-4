@@ -92,7 +92,7 @@
 				<div class="largeLineBreak"></div>
 				<textarea class="largeText" v-model="userBio" placeholder="Bio"></textarea>
 				<p></p>
-				<input v-model="userExperience" placeholder="Cooking Experience Level">
+				<input class="smallText" v-model="userExperience" placeholder="Cooking Experience Level">
 				<div class="largeLineBreak"></div>
 				<button @click="uploadUser">Upload</button>
 			</div>
@@ -112,7 +112,7 @@
 				<p></p>
 				<textarea class="largeText" v-model="findUser.bio"></textArea>
 				<p></p>
-				<input v-model="findUser.experience" />
+				<input class="smallText" v-model="findUser.experience" />
 				<p>Favorite Recipes</p>
 				<ul>
 					<div class="recipe" v-for="recipe in findUserRecipes" :key="recipe._id">
@@ -455,6 +455,10 @@ button {
 .suggestion:hover {
 	background-color: #f2ebc9;
 	color: #633417;
+}
+
+.smallText {
+	width: 50%;
 }
 
 .largeText {
