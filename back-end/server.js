@@ -201,4 +201,50 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
+app.put('/api/users/favorites', async (req, res) => {
+  try {
+    let user = await User.findOne({
+      username: req.body.username
+    });
+    if (user === null) {
+      res.status(404).send('Error: User not Found');
+    }
+    let recipe = await Recipe.findOne({
+      _id: req.body.recipeID
+    })
+    if (recipe === null) {
+      res.status(404).send('Error: Recipe not Found');
+    }
+    if (!user.favorite_recipes.include(recipe)) {
+      user.favorite_recipes.push(recipe)
+    }
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.delete('/api/users/favorites', async (req, res) => {
+  try {
+    let user = await User.findOne({
+      username: req.body.username
+    });
+    if (user === null) {
+      res.status(404).send('Error: User not Found');
+    }
+    if (user.favorite_recipes.include(recipe)) {
+      user.favorite_recipes = user.favorite_recipes.filter(recipe => {
+        return !(recipe._id === req.body.recipeID)
+      });
+    }
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3001, () => console.log('Server listening on port 3001!'));
