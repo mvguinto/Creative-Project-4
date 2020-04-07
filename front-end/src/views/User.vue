@@ -17,7 +17,20 @@ export default {
 	},
 	data() {
 		return {
-			user: null
+			user:
+		}
+	},
+	async created() {
+		this.user = await this.getUser()
+	}
+	methods: {
+		async getUser() {
+			try {
+				let response = await axios.get("/api/user/" + this.UserID)
+				this.user = response.data;
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	},
 }
