@@ -107,12 +107,12 @@
 				</div>
 			</div>
 			<div class="upload" v-if="findUser">
-				<input v-model="findUser.name">
-				<input v-model="findUser.username">
+				<input v-model="findUser.name" placeholder="Name">
+				<input v-model="findUser.username" placeholder="Username">
 				<p></p>
-				<textarea class="largeText" v-model="findUser.bio"></textArea>
+				<textarea class="largeText" v-model="findUser.bio" placeholder="Bio"></textarea>
 				<p></p>
-				<input class="smallText" v-model="findUser.experience" />
+				<input class="smallText" v-model="findUser.experience" placeholder="Cooking Experience Level" />
 				<p>Favorite Recipes</p>
 				<ul>
 					<div class="recipe" v-for="recipe in findUserRecipes" :key="recipe._id">
