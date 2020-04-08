@@ -48,7 +48,7 @@
 		<!--Edit and Delete Recipe -->
 		<div class="editDeleteRecipeView" v-show="editDeleteRecipe">
 			<div class="form">
-				<input v-model="findName" placeholder="Search by Recipe Name">
+				<input v-model="findName" placeholder="Search Recipe Names">
 				<div class="suggestions" v-if="suggestions.length > 0">
 					<div class="suggestion" v-for="s in suggestions" :key="s._id" @click="selectRecipe(s)">{{s.name}}
 					</div>
@@ -100,7 +100,7 @@
 		<!--Edit and Delete User -->
 		<div class="editDeleteUserView" v-show="editDeleteUser">
 			<div class="form">
-				<input v-model="findName" placeholder="Search by Username">
+				<input v-model="findName" placeholder="Search Username">
 				<div class="suggestions" v-if="suggestions.length > 0">
 					<div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
 					</div>
