@@ -60,8 +60,8 @@
 				<img :src="findRecipe.image" />
 				<div class="lineBreak"></div>
 				<div class="editIngredients" v-for="(ingredient, index) in findRecipe.ingredients" :key="`ingredient-${index}`">
-					<input v-model="ingredient.name" placeholder="Add Ingredient Name">
-					<input v-model="ingredient.measurement" placeholder="Add Igredient Measurement">
+					<input v-model="ingredient.name" placeholder="Name">
+					<input v-model="ingredient.measurement" placeholder="Measurement">
 				</div>
 				<input v-model="ingredientName" placeholder="Name">
 				<input v-model="ingredientMeasurment" placeholder="Measurement">
