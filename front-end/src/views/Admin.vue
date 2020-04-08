@@ -115,7 +115,7 @@
 				<input class="smallText" v-model="findUser.experience" placeholder="Cooking Experience Level" />
 				<p>Favorite Recipes</p>
 				<ul>
-					<div class="recipe" v-for="recipe in findUserRecipes" :key="recipe._id">
+					<div class="favoriteRecipe" v-for="recipe in findUserRecipes" :key="recipe._id">
 						<li>
 							<router-link :to="{ name: 'Recipe', params: {recipeID: recipe._id }}">{{recipe.name}}</router-link>
 						</li>
