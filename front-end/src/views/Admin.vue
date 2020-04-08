@@ -100,7 +100,7 @@
 		<!--Edit and Delete User -->
 		<div class="editDeleteUserView" v-show="editDeleteUser">
 			<div class="form">
-				<input v-model="findName" placeholder="Search Username">
+				<input v-model="findName" placeholder="Search Usernames">
 				<div class="suggestions" v-if="suggestions.length > 0">
 					<div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectUser(s)">{{s.username}}
 					</div>
