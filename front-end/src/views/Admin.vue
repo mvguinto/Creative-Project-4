@@ -18,9 +18,9 @@
 					<ul>
 						<li class="ingredient" v-for="ingredient in addedIngredients" :key="ingredient.name">{{ingredient.measurement}} {{ingredient.name}}</li>
 					</ul>
-					<input v-model="ingredientName" placeholder="Ingredient Name">
-					<input v-model="ingredientMeasurment" placeholder="Ingredient Measurement">
-					<button @click="addIngredient">Add Ingredient</button>
+					<input v-model="ingredientName" placeholder="Name">
+					<input v-model="ingredientMeasurment" placeholder="Measurement">
+					<button @click="addIngredient">Add New Ingredient</button>
 				</div>
 				<div class="addInstructions">
 					<p>Please add recipe one step at a time</p>
@@ -29,7 +29,7 @@
 					</ol>
 					<textarea class="largeText" v-model="recipeInstruction" placeholder="Recipe Step"></textarea>
 					<div></div>
-					<button @click="addInstruction">Add Step</button>
+					<button @click="addInstruction">Add New Step</button>
 				</div>
 				<input v-model="difficulty" placeholder="Recipe Difficulty">
 				<div class="lineBreak"></div>
@@ -55,24 +55,24 @@
 				</div>
 			</div>
 			<div class="upload" v-if="findRecipe">
-				<input v-model="findRecipe.name">
+				<input v-model="findRecipe.name" , placeholder="Name">
 				<div class="largeLineBreak"></div>
 				<img :src="findRecipe.image" />
 				<div class="lineBreak"></div>
 				<div class="editIngredients" v-for="(ingredient, index) in findRecipe.ingredients" :key="`ingredient-${index}`">
-					<input v-model="ingredient.name">
-					<input v-model="ingredient.measurement">
+					<input v-model="ingredient.name" placeholder="Add Ingredient Name">
+					<input v-model="ingredient.measurement" placeholder="Add Igredient Measurement">
 				</div>
-				<input v-model="ingredientName" placeholder="Add New Ingredient Name">
-				<input v-model="ingredientMeasurment" placeholder="Add New Ingredient Measurement">
-				<button @click="editAddIngredient">Add Ingredient</button>
+				<input v-model="ingredientName" placeholder="Name">
+				<input v-model="ingredientMeasurment" placeholder="Measurement">
+				<button @click="editAddIngredient">Add New Ingredient</button>
 				<div class="lineBreak"></div>
 				<div class="editRecipe" v-for="(instruction, index) in findRecipe.recipe" :key="`instruction-${index}`">
-					<textarea class="largeText" v-model="instruction.instruction"></textarea>
+					<textarea class="largeText" v-model="instruction.instruction" placeholder="Recipe Step"></textarea>
 				</div>
-				<textarea class="largeText" v-model="recipeInstruction" placeholder="Add New Recipe Step"></textarea>
+				<textarea class="largeText" v-model="recipeInstruction" placeholder="Recipe Step"></textarea>
 				<div class="lineBreak"></div>
-				<button @click="editAddInstruction">Add Step</button>
+				<button @click="editAddInstruction">Add New Step</button>
 				<div class="lineBreak"></div>
 				<input v-model="findRecipe.imageSource" placeholder="Add an Image Source">
 				<div></div>
