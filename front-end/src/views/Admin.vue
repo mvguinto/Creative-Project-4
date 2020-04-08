@@ -55,7 +55,7 @@
 				</div>
 			</div>
 			<div class="upload" v-if="findRecipe">
-				<input v-model="findRecipe.name" , placeholder="Name">
+				<input v-model="findRecipe.name" placeholder="Name">
 				<div class="largeLineBreak"></div>
 				<img :src="findRecipe.image" />
 				<div class="lineBreak"></div>
